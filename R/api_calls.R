@@ -1,5 +1,4 @@
 rest_api_call <- function(object,method,endpoint,method_params){
-  message("Here in Rest Api Method Params",method," ",endpoint,method_params)
   if(!method=="POST"){
     if(!is_api_connected(object)){
       stop(NotConnectedToAPIException)
@@ -17,7 +16,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
     authorization=''
   }else{
     authorization=paste0("Bearer ",object@access_token)
-    message("in else",authorization)
+
   }
 
 
@@ -38,7 +37,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
                                        "X-SourceID"=sourceID,
                                        "Authorization"=authorization))
     } else if(method=="post"){
-      message("Inside Post")
+
       r <- httr::POST(url,body = method_params, encode = "json",
                       httr::add_headers("Content-type"=accept,
                                         "X-ClientLocalIP"=clientLocalIP,
@@ -81,9 +80,9 @@ rest_api_call <- function(object,method,endpoint,method_params){
     stop(HttpException)
 
     if(r$status_code != 200){
-      message("Status=",r$status_code)
+
       r <- httr::content(r)
-      message(r$error_type)
+
       message(paste0(r$error_type,": ",r$message))
       return(NULL)
     }
@@ -93,7 +92,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
     }
 
     r <- suppressMessages(httr::content(r))
-    message(r)
+
     if(any(class(r)=="data.frame") && NROW(r)>0){
       return(r)
     }
@@ -187,7 +186,7 @@ place_order<-function(object,variety,tradingsymbol,symboltoken,transactiontype,e
 
   tryCatch({r <- rest_api_call(object,"POST","api.order.place",method_params)
   r<-httr::content(r)
-  message(r)
+
   }, error=function(e){
     message(e$message)
   })
@@ -277,7 +276,7 @@ cancel_order<-function(object,orderid,variety){
   tryCatch({
     r<-rest_api_call(object,"POST","api.order.cancel",method_params)
     r<-httr::content(r)
-    message(r)
+
   }, error=function(e){
     message(e$message)
   })
@@ -317,7 +316,7 @@ get_ltp_data<-function(object,exchange,tradingsymbol,symboltoken){
   tryCatch({
     r<-rest_api_call(object,"POST","api.ltp.data",method_params)
     r<-httr::content(r)
-    message(r)
+
   }, error=function(e){
     message(e$message)
   })
@@ -337,7 +336,7 @@ order_book<-function(object){
   tryCatch({
     r<-rest_api_call(object,"GET","api.order.book",method_params)
     r<-httr::content(r)
-    message(r)
+
   }, error=function(e){
     message(e$message)
   })
@@ -358,7 +357,7 @@ trade_book<-function(object){
   tryCatch({
     r<-rest_api_call(object,"GET","api.trade.book",method_params)
     r<-httr::content(r)
-    message(names(r))
+
   }, error=function(e){
     message(e$message)
   })
@@ -379,7 +378,7 @@ rms_limit<-function(object){
   tryCatch({
     r<-rest_api_call(object,"GET","api.rms.limit",method_params)
     r<-httr::content(r)
-    message(names(r))
+
   }, error=function(e){
     message(e$message)
   })
@@ -400,7 +399,7 @@ position<-function(object){
   tryCatch({
     r<-rest_api_call(object,"GET","api.position",method_params)
     r<-httr::content(r)
-    message(r)
+
   }, error=function(e){
     message(e$message)
   })

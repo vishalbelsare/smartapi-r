@@ -24,7 +24,7 @@ is_connection_obj <-function(object){
 
 is_valid_api_key <- function(object){
   if(!is_connection_obj(object))return(FALSE)
-  message("Apikey checked")
+
   return(length(object@api_key) > 0)
 }
 is_valid_refresh_token <- function(object){
@@ -41,7 +41,7 @@ is_valid_session_hook <- function(object){
 }
 is_valid_root <- function(object){
   if(!is_connection_obj(object))return(FALSE)
-  message("Root checked")
+
   return(length(object@root) > 0)
 }
 is_valid_login <- function(object){
@@ -50,7 +50,7 @@ is_valid_login <- function(object){
 }
 is_valid_routes <- function(object){
   if(!is_connection_obj(object))return(FALSE)
-  message("Route Checked")
+
   return(length(object@routes) > 0)
 }
 is_valid_details <- function(object){
@@ -63,7 +63,7 @@ is_valid_timeout <- function(object){
 }
 is_valid_connection <- function(object){
   if(!is_connection_obj(object))return(FALSE)
-  message("Connect Vallidation")
+
   return(
     is_valid_api_key(object) &
       is_valid_root(object) &
@@ -71,7 +71,7 @@ is_valid_connection <- function(object){
   )
 }
 is_logged_connection <- function(object){
-  message("is_logged_connection")
+
   if(!is_connection_obj(object))return(FALSE)
   return(
     is_valid_connection(object) &
@@ -80,7 +80,7 @@ is_logged_connection <- function(object){
 }
 
 is_api_connected <- function(object){
-  message("is_api_connected")
+
   if(!is_connection_obj(object))return(FALSE)
   return(
     is_logged_connection(object) &
@@ -104,9 +104,9 @@ set_refresh_token <- function(object,refresh_token){
     message("Invalid smart connect object")
   }
   if(any(class(refresh_token)=="character")){
-    message("set refresh token")
+
     object@refresh_token <- refresh_token
-    message(object@refresh_token)
+
   }else{
     message("Invalid refresh token")
   }
@@ -122,7 +122,7 @@ set_refresh_token <- function(object,refresh_token){
 
 set_access_token <- function(object,access_token){
   if(any(class(access_token)=="character")){
-    message("set access token")
+
     object@access_token <- access_token
   }else{
     message("Invalid access token")
@@ -318,7 +318,7 @@ create_connection_object <- function(params){
   })
 
   if(!is_valid_connection(object)){
-    message("this is the object")
+
     message("Failed to create smart connect object")
     return(NULL)
   }
@@ -343,10 +343,10 @@ create_connection_object <- function(params){
 
 generate_session<-function(object,clientcode,password){
   method_params = list("clientcode"=clientcode,"password"=password)
-  message("method_params",method_params)
+
   r <- NULL
   tryCatch({
-    message("inside try catch")
+
     r<-rest_api_call(object,"POST","api.login",method_params)
     r<-httr::content(r)
 
@@ -384,13 +384,13 @@ generate_session<-function(object,clientcode,password){
 #'@return A string containing the access token.
 #'@export
 generate_token<-function(object,refresh_token){
-  message(refresh_token)
+
   method_params=list("refreshToken"=refresh_token)
   r <- NULL
   tryCatch({
     r<-rest_api_call(object,"POST","api.token",method_params)
     r<-httr::content(r)
-    message("--------------------",r)
+
   },error=function(e){
     message(e$message)
     stop(InvalidRefreshTokenException)
@@ -451,9 +451,9 @@ terminate_session=function(object,user_id){
   r <- NULL
   tryCatch({
     r<-rest_api_call(object,"POST","api.logout",method_params)
-    message(r)
+
     r<-httr::content(r)
-    message(r)
+
   })
   object=set_details(object,r)
   return(object)
