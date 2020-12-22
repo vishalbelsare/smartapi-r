@@ -1,4 +1,5 @@
 rest_api_call <- function(object,method,endpoint,method_params){
+
   if(!method=="POST"){
     if(!is_api_connected(object)){
       stop(NotConnectedToAPIException)
@@ -399,6 +400,7 @@ position<-function(object){
   tryCatch({
     r<-rest_api_call(object,"GET","api.position",method_params)
     r<-httr::content(r)
+
 
   }, error=function(e){
     message(e$message)
