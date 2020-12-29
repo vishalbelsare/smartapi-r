@@ -4,14 +4,14 @@
 \alias{generate_session}
 \title{Function to start an api session.}
 \usage{
-generate_session(object, clientcode, password)
+generate_session(object, clientCode, password)
 }
 \arguments{
 \item{object}{of type smart connect, must have a valid client code and password set.}
 
-\item{password}{valid password against the user/client id is must.}
-
 \item{clientCode}{valid client id of the user is must.}
+
+\item{password}{valid password against the user/client id is must.}
 }
 \value{
 the object data with access token and refresh token.

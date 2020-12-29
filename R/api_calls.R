@@ -1,5 +1,4 @@
 rest_api_call <- function(object,method,endpoint,method_params){
-
   if(!method=="POST"){
     if(!is_api_connected(object)){
       stop(NotConnectedToAPIException)
@@ -81,9 +80,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
     stop(HttpException)
 
     if(r$status_code != 200){
-
       r <- httr::content(r)
-
       message(paste0(r$error_type,": ",r$message))
       return(NULL)
     }
@@ -107,7 +104,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
     }
 
     if(length(r$data)>0){
-      message("Inside length check",r$data)
+
       if(smart_error(toString(r$data[[1]]))){
         stop(SmartException)
       }
@@ -116,7 +113,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
     if(length(r$data)==0){
       stop(NoDataException)
     }
-    messgae("API CALL*****************",r)
+
     return(r)
   })
 
@@ -400,7 +397,6 @@ position<-function(object){
   tryCatch({
     r<-rest_api_call(object,"GET","api.position",method_params)
     r<-httr::content(r)
-
 
   }, error=function(e){
     message(e$message)

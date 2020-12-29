@@ -24,7 +24,6 @@ is_connection_obj <-function(object){
 
 is_valid_api_key <- function(object){
   if(!is_connection_obj(object))return(FALSE)
-
   return(length(object@api_key) > 0)
 }
 is_valid_refresh_token <- function(object){
@@ -104,9 +103,8 @@ set_refresh_token <- function(object,refresh_token){
     message("Invalid smart connect object")
   }
   if(any(class(refresh_token)=="character")){
-
     object@refresh_token <- refresh_token
-
+    message(object@refresh_token)
   }else{
     message("Invalid refresh token")
   }
@@ -122,7 +120,6 @@ set_refresh_token <- function(object,refresh_token){
 
 set_access_token <- function(object,access_token){
   if(any(class(access_token)=="character")){
-
     object@access_token <- access_token
   }else{
     message("Invalid access token")
@@ -318,7 +315,6 @@ create_connection_object <- function(params){
   })
 
   if(!is_valid_connection(object)){
-
     message("Failed to create smart connect object")
     return(NULL)
   }
@@ -341,12 +337,11 @@ create_connection_object <- function(params){
 #'@return the object data with access token and refresh token.
 #'@export
 
-generate_session<-function(object,clientcode,password){
-  method_params = list("clientcode"=clientcode,"password"=password)
-
+generate_session<-function(object,clientCode,password){
+  method_params = list("clientcode"=clientCode,"password"=password)
   r <- NULL
   tryCatch({
-
+    message("inside try catch")
     r<-rest_api_call(object,"POST","api.login",method_params)
     r<-httr::content(r)
 
@@ -357,17 +352,19 @@ generate_session<-function(object,clientcode,password){
 
   access_token=r$data$jwtToken
   refresh_token=r$data$refreshToken
+  feed_token=r$data$feedToken
+
   object=set_access_token(object,access_token)
   object=set_refresh_token(object,refresh_token)
-  object=set_feed_token(object,r$data$feed_token)
+  object=set_feed_token(object,feed_token)
   tryCatch({
     user<- get_profile(object,refresh_token)
-    message(user)
     user_id=user$data[["clientcode"]]
     object=set_user_id(object,user_id)
   })
   user$data$jwtToken=paste0(object@access_token)
   user$data$refreshToken=object@refresh_token
+  object=set_details(object,user)
   return(object)
 }
 
@@ -384,7 +381,7 @@ generate_session<-function(object,clientcode,password){
 #'@return A string containing the access token.
 #'@export
 generate_token<-function(object,refresh_token){
-
+  message(refresh_token)
   method_params=list("refreshToken"=refresh_token)
   r <- NULL
   tryCatch({
