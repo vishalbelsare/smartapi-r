@@ -15,7 +15,15 @@ setClass("smartConnect",
            root = "character",
            login = "character",
            routes = "list",
-           details = "list"
+           details = "list",
+           publicip="character",
+           localip="character",
+           macaddress="character",
+           accept="character",
+           usertype="character",
+           sourceid="character",
+           privatekey="character"
+
          )
          )
 is_connection_obj <-function(object){
@@ -232,6 +240,9 @@ set_details <- function(object, data){
   }
   return(object)
 }
+
+
+
 get_api_endpoint <- function(object,endpoint){
   if(!is_valid_connection(object)){
     message("Invalid Smart connect object")
@@ -325,6 +336,27 @@ create_connection_object <- function(params){
   if(!is.null(params[["proxies"]])){
     object@proxies <- params[["proxies"]]
   }
+  object@publicip<-get_ip()
+  object@localip<-tryCatch({
+    gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
+  },
+  warning=function(war){
+    print(paste("MY WARNING: ", war))
+  },
+  error = function(err)
+  {
+    print(paste("MY ERROR: ", err))
+  },
+  finally = function(f)
+  {
+    print(paste("127.0.0.0"))
+  })
+  ipconfig <- system("ipconfig", intern=TRUE)
+  object@macaddress <- gsub(".*:? ([[:xdigit:]])", "\\1", system("ipconfig", intern=T)[grep("Link-local IPv6 Address", system("ipconfig", intern = T))])
+  object@accept <- "application/json"
+  object@usertype <- "USER"
+  object@sourceid <-"WEB"
+
   return(object)
 }
 
@@ -343,6 +375,7 @@ generate_session<-function(object,clientCode,password){
   tryCatch({
     message("inside try catch")
     r<-rest_api_call(object,"POST","api.login",method_params)
+    message("***********************************",r)
     r<-httr::content(r)
 
   },error=function(e){
@@ -386,6 +419,7 @@ generate_token<-function(object,refresh_token){
   r <- NULL
   tryCatch({
     r<-rest_api_call(object,"POST","api.token",method_params)
+    message(r)
     r<-httr::content(r)
 
   },error=function(e){

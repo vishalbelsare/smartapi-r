@@ -5,8 +5,6 @@ setClass("webSocket",
            url = "character",
            feedToken = "character",
            clientCode ="character",
-           script="character"
-
          )
          )
 root_url<- "wss://omnefeeds.angelbroking.com/NestHtml5Mobile/socket/stream"
@@ -19,21 +17,20 @@ connect_object<-function(params){
                             params[["feedToken"]])
     object@clientCode=ifelse(is.null(params[["clientCode"]]),message("clientCode cannot be blank"),
                             params[["clientCode"]])
-  object@script=ifelse(is.null(params[['script']]),'',params[["script"]])
     }, error=function(e){
     message("in error function",e$message)
   })
   return(object)
 }
 
-webSocket.connect<-(function(object){
+webSocket.connect<-(function(object,script,task){
   ws <- websocket::WebSocket$new(object@url,autoConnect = FALSE)
   ws$connect()
   ws$onOpen(function(event){
     is_open<-TRUE
     message("connection is opened")
     ws$send(toJSON(list("task"="cn","channel"="","token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
-    ws$send(toJSON(list("task"="mw","channel"=object@script,"token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
+    ws$send(toJSON(list("task"=task,"channel"=script,"token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
     send_ticks()
   })
   send_ticks<-function(){
