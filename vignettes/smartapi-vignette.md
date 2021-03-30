@@ -1,13 +1,14 @@
 ---
 title: "R Package for Smart Connect API"
-date: "`r Sys.Date()`"
+date: "2021-03-31"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{smartapi-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-```{r setup}
+
+```r
 library(smartapi)
 ```
 
@@ -59,7 +60,6 @@ gttmodifyRule<-gtt_modify(object,10,"SBIN-EQ","3045","NSE","MARGIN","BUY",100000
 gttCancelRule<-gtt_cancel(object,10,"3045","NSE")
 gttDetails<-gtt_details(object,10)
 gttLists<-gtt_lists(object,c("FORALL","CANCELLED"),1,10)
-historicdata<-get_candle_data(object,"NSE","3045","THREE_MINUTE","2021-03-08 09:00","2021-03-09 09:20")
 
 
 ##Websocket

@@ -336,7 +336,7 @@ create_connection_object <- function(params){
   if(!is.null(params[["proxies"]])){
     object@proxies <- params[["proxies"]]
   }
-  object@publicip<-get_ip()
+  object@publicip<-myip()
   object@localip<-tryCatch({
     gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
   },
@@ -352,7 +352,8 @@ create_connection_object <- function(params){
     print(paste("127.0.0.0"))
   })
   ipconfig <- system("ipconfig", intern=TRUE)
-  object@macaddress <- gsub(".*:? ([[:xdigit:]])", "\\1", system("ipconfig", intern=T)[grep("Link-local IPv6 Address", system("ipconfig", intern = T))])
+  ipv6 <- ipconfig[grep("IPv6", ipconfig)]
+  object@macaddress <- gsub(".*:? ([[:alnum:]])", "\\1", ipv6)
   object@accept <- "application/json"
   object@usertype <- "USER"
   object@sourceid <-"WEB"
@@ -375,7 +376,7 @@ generate_session<-function(object,clientCode,password){
   tryCatch({
     message("inside try catch")
     r<-rest_api_call(object,"POST","api.login",method_params)
-    message("***********************************",r)
+    message(r)
     r<-httr::content(r)
 
   },error=function(e){

@@ -1,5 +1,5 @@
 
-library(ipify)
+#library(ipify)
 options(scipen=999)
 
 rest_api_call <- function(object,method,endpoint,method_params){
@@ -465,16 +465,19 @@ convert_position<-function(object,exchange,oldproducttype,newproducttype,trading
 #'@return Returns a rule id, if successful.
 #'@export
 
-gtt_create<-function(object,tradingsymbol,symboltoken,exchange,producttype,transactiontype,price,qty,disclosedqty,triggerprice,timeperiod){
+gtt_create<-function(object,tradingsymbol,symboltoken,exchange,producttype,transactiontype,price,quantity,disclosedqty,triggerprice,timeperiod){
   params <- as.list(environment(), all=TRUE)
   params[["object"]] <- NULL
   keys <- names(params)
+  message(keys)
   for(key in keys){
     if(is.null(params[[key]])){
+      message(key)
       params[[key]] <- NULL
     }
-    }
 
+
+    }
 
   method_params = params
   r <- NULL
@@ -503,7 +506,7 @@ gtt_create<-function(object,tradingsymbol,symboltoken,exchange,producttype,trans
 #'@param timeperiod Time Period.
 #'@return Returns a rule id, if successful.
 #'@export
-gtt_modify<-function(object,id,symboltoken,exchange,price,qty,triggerprice,disclosedqty,timeperiod){
+gtt_modify<-function(object,id,tradingsymbol,symboltoken,exchange,producttype,transactiontype,price,quantity,triggerprice,disclosedqty,timeperiod){
   params <- as.list(environment(), all=TRUE)
   params[["object"]] <- NULL
   keys <- names(params)
@@ -511,6 +514,16 @@ gtt_modify<-function(object,id,symboltoken,exchange,price,qty,triggerprice,discl
   for(key in keys){
     if(is.null(params[[key]])){
       params[[key]] <- NULL
+    }
+    else{
+      message("in else")
+      if(key == "id" ||key == "price" || key == "quantity" || key== "disclosedqty" || key == "triggerprice" || key == "timeperiod"){
+        message("in if",key)
+        params[[key]]<-as.integer(params[[key]])
+
+        message(params[[key]])
+
+      }
     }
   }
 
@@ -613,6 +626,39 @@ gtt_lists<-function(object,status,page,count){
     message(e$message)
   })
   if(!is.null(r))r <- r
+  return(r)
+}
+#'Function to get the historic data
+#'@param object An object of type smart connect.
+#'@param exchange Exchange for the order, e.g. NSE, NFO, CDS etc
+#'@param symboltoken symboltoken.
+#'@param interval time interval
+#'@param fromdate fromdate
+#'@param todate todate
+#'@return Returns historic data from the date range given with the time interval provided, if successful.
+#'@export
+get_candle_data<-function(object,exchange,symboltoken,interval,fromdate,todate){
+  params <- as.list(environment(), all=TRUE)
+  params[["object"]] <- NULL
+  keys <- names(params)
+
+  for(key in keys){
+    if(is.null(params[[key]])){
+      params[[key]] <- NULL
+    }
+  }
+
+  method_params = params
+  r <- NULL
+
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.candle.data",method_params)
+    r<-httr::content(r)
+
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r)) r <- r$data
   return(r)
 }
 

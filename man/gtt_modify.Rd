@@ -7,10 +7,13 @@
 gtt_modify(
   object,
   id,
+  tradingsymbol,
   symboltoken,
   exchange,
+  producttype,
+  transactiontype,
   price,
-  qty,
+  quantity,
   triggerprice,
   disclosedqty,
   timeperiod
@@ -27,13 +30,13 @@ gtt_modify(
 
 \item{price}{New Price (e.g. for limit orders).}
 
+\item{quantity}{New quantity.}
+
 \item{triggerprice}{Trigger Price}
 
 \item{disclosedqty}{Disclosed Quantity}
 
 \item{timeperiod}{Time Period.}
-
-\item{quantity}{New quantity.}
 }
 \value{
 Returns a rule id, if successful.

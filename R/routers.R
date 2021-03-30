@@ -30,3 +30,5 @@ api_routes[["api.gtt.modify"]]="/gtt-service/rest/secure/angelbroking/gtt/v1/mod
 api_routes[["api.gtt.cancel"]]="/gtt-service/rest/secure/angelbroking/gtt/v1/cancelRule"
 api_routes[["api.gtt.details"]]="/rest/secure/angelbroking/gtt/v1/ruleDetails"
 api_routes[["api.gtt.list"]]="/gtt-service/rest/secure/angelbroking/gtt/v1/ruleList"
+
+api_routes[["api.candle.data"]]="/rest/secure/angelbroking/historical/v1/getCandleData"

@@ -12,7 +12,7 @@ gtt_create(
   producttype,
   transactiontype,
   price,
-  qty,
+  quantity,
   disclosedqty,
   triggerprice,
   timeperiod
@@ -33,13 +33,13 @@ gtt_create(
 
 \item{price}{New Price (e.g. for limit orders).}
 
+\item{quantity}{New quantity.}
+
 \item{disclosedqty}{Disclosed Quantity}
 
 \item{triggerprice}{Trigger Price}
 
 \item{timeperiod}{Time Period.}
-
-\item{quantity}{New quantity.}
 }
 \value{
 Returns a rule id, if successful.
