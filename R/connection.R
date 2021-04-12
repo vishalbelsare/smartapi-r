@@ -336,7 +336,7 @@ create_connection_object <- function(params){
   if(!is.null(params[["proxies"]])){
     object@proxies <- params[["proxies"]]
   }
-  object@publicip<-myip()
+  object@publicip<-gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
   object@localip<-tryCatch({
     gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
   },
