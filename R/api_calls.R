@@ -1,3 +1,7 @@
+
+#library(ipify)
+options(scipen=999)
+
 rest_api_call <- function(object,method,endpoint,method_params){
   if(!method=="POST"){
     if(!is_api_connected(object)){
@@ -5,13 +9,9 @@ rest_api_call <- function(object,method,endpoint,method_params){
     }
   }
   url <- get_api_endpoint(object,endpoint)
-  clientLocalIP='192.168.168.168'
-  clientPublicIP ='106.193.147.98'
-  macAddress='fe80::216e:6507:4b90:3719'
+
   privateKey=object@api_key
-  accept="application/json"
-  userType="USER"
-  sourceID="WEB"
+
   if(endpoint=="api.login"){
     authorization=''
   }else{
@@ -27,50 +27,50 @@ rest_api_call <- function(object,method,endpoint,method_params){
   tryCatch({
     if(method=="get"){
       r <- httr::GET(url,body = method_params,
-                     httr::add_headers("Content-type"=accept,
-                                       "X-ClientLocalIP"=clientLocalIP,
-                                       "X-ClientPublicIP"=clientPublicIP,
-                                       "X-MACAddress"=macAddress,
-                                       "Accept"=accept,
+                     httr::add_headers("Content-type"=object@accept,
+                                       "X-ClientLocalIP"=object@localip,
+                                       "X-ClientPublicIP"=object@publicip,
+                                       "X-MACAddress"=object@macaddress,
+                                       "Accept"=object@accept,
                                        "X-PrivateKey"=privateKey,
-                                       "X-UserType"=userType,
-                                       "X-SourceID"=sourceID,
+                                       "X-UserType"=object@usertype,
+                                       "X-SourceID"=object@sourceid,
                                        "Authorization"=authorization))
     } else if(method=="post"){
 
       r <- httr::POST(url,body = method_params, encode = "json",
-                      httr::add_headers("Content-type"=accept,
-                                        "X-ClientLocalIP"=clientLocalIP,
-                                        "X-ClientPublicIP"=clientPublicIP,
-                                        "X-MACAddress"=macAddress,
-                                        "Accept"=accept,
+                      httr::add_headers("Content-type"=object@accept,
+                                        "X-ClientLocalIP"=object@localip,
+                                        "X-ClientPublicIP"=object@publicip,
+                                        "X-MACAddress"=object@macaddress,
+                                        "Accept"=object@accept,
                                         "X-PrivateKey"=privateKey,
-                                        "X-UserType"=userType,
-                                        "X-SourceID"=sourceID,
+                                        "X-UserType"=object@usertype,
+                                        "X-SourceID"=object@sourceid,
                                         "Authorization"=authorization))
 
 
     } else if(method=="put"){
       r <- httr::PUT(url,body = method_params, encode = "json",
-                     httr::add_headers("Content-type"=accept,
-                                       "X-ClientLocalIP"=clientLocalIP,
-                                       "X-ClientPublicIP"=clientPublicIP,
-                                       "X-MACAddress"=macAddress,
-                                       "Accept"=accept,
+                     httr::add_headers("Content-type"=object@accept,
+                                       "X-ClientLocalIP"=object@localip,
+                                       "X-ClientPublicIP"=object@publicip,
+                                       "X-MACAddress"=object@macaddress,
+                                       "Accept"=object@accept,
                                        "X-PrivateKey"=privateKey,
-                                       "X-UserType"=userType,
-                                       "X-SourceID"=sourceID,
+                                       "X-UserType"=object@usertype,
+                                       "X-SourceID"=object@sourceid,
                                        "Authorization"=authorization))
     } else if(method=="delete"){
       r <- httr::DELETE(url,body = method_params, encode = "json",
-                        httr::add_headers("Content-type"=accept,
-                                          "X-ClientLocalIP"=clientLocalIP,
-                                          "X-ClientPublicIP"=clientPublicIP,
-                                          "X-MACAddress"=macAddress,
-                                          "Accept"=accept,
+                        httr::add_headers("Content-type"=object@accept,
+                                          "X-ClientLocalIP"=object@localip,
+                                          "X-ClientPublicIP"=object@publicip,
+                                          "X-MACAddress"=object@macaddress,
+                                          "Accept"=object@accept,
                                           "X-PrivateKey"=privateKey,
-                                          "X-UserType"=userType,
-                                          "X-SourceID"=sourceID,
+                                          "X-UserType"=object@usertype,
+                                          "X-SourceID"=object@sourceid,
                                           "Authorization"=authorization))
     } else{
       stop(UnknwonHttpException)
@@ -448,3 +448,217 @@ convert_position<-function(object,exchange,oldproducttype,newproducttype,trading
   if(!is.null(r)) r
   return(r)
 }
+
+#'Function to create Gtt rules
+#'@description Function to create Gtt rules
+#'@param object An object of type smart connect
+#'@param tradingsymbol Trading Symbol of the instrument.
+#'@param symboltoken Symbol token
+#'@param exchange Exchange for the order, e.g. NSE, NFO, CDS etc.
+#'@param transactiontype BUY or SELL.
+#'@param producttype Product type, e.g. MIS, NRML, CNC, BO or CO.
+#'@param price New Price (e.g. for limit orders).
+#'@param quantity New quantity.
+#'@param triggerprice Trigger Price
+#'@param disclosedqty Disclosed Quantity
+#'@param timeperiod Time Period.
+#'@return Returns a rule id, if successful.
+#'@export
+
+gtt_create<-function(object,tradingsymbol,symboltoken,exchange,producttype,transactiontype,price,quantity,disclosedqty,triggerprice,timeperiod){
+  params <- as.list(environment(), all=TRUE)
+  params[["object"]] <- NULL
+  keys <- names(params)
+  message(keys)
+  for(key in keys){
+    if(is.null(params[[key]])){
+      message(key)
+      params[[key]] <- NULL
+    }
+
+
+    }
+
+  method_params = params
+  r <- NULL
+  message(is.list(method_params))
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.gtt.create",method_params)
+    message(r)
+    r<-httr::content(r)
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r)) r
+  return(r)
+}
+
+#'Function to modify gtt rule
+#'@description Function to modify gtt rule
+#'@param object An object of type smart connect
+#'@param id Gtt rule id
+#'@param symboltoken Symbol token
+#'@param exchange Exchange for the order, e.g. NSE, NFO, CDS etc.
+#'@param price New Price (e.g. for limit orders).
+#'@param quantity New quantity.
+#'@param triggerprice Trigger Price
+#'@param disclosedqty Disclosed Quantity
+#'@param timeperiod Time Period.
+#'@return Returns a rule id, if successful.
+#'@export
+gtt_modify<-function(object,id,tradingsymbol,symboltoken,exchange,producttype,transactiontype,price,quantity,triggerprice,disclosedqty,timeperiod){
+  params <- as.list(environment(), all=TRUE)
+  params[["object"]] <- NULL
+  keys <- names(params)
+
+  for(key in keys){
+    if(is.null(params[[key]])){
+      params[[key]] <- NULL
+    }
+    else{
+      message("in else")
+      if(key == "id" ||key == "price" || key == "quantity" || key== "disclosedqty" || key == "triggerprice" || key == "timeperiod"){
+        message("in if",key)
+        params[[key]]<-as.integer(params[[key]])
+
+        message(params[[key]])
+
+      }
+    }
+  }
+
+  method_params = params
+  r <- NULL
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.gtt.modify",method_params)
+    r<-httr::content(r)
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r)) r
+  return(r)
+}
+
+#'Function to cancel gtt rule
+#'@param object An object of type smart connect.
+#'@param id Gtt rule id.
+#'@param symboltoken Symbol token
+#'@param exchange Exchange for the order, e.g. NSE, NFO, CDS etc
+#'@return Returns a rule id, if successful.
+#'@export
+gtt_cancel<-function(object,id,symboltoken,exchange){
+  params <- as.list(environment(), all=TRUE)
+  params[["object"]] <- NULL
+  keys <- names(params)
+
+  for(key in keys){
+    if(is.null(params[[key]])){
+      params[[key]] <- NULL
+    }
+    else{
+      message("in else")
+      if(key == "id" ||key == "price" || key == "quantity" || key== "disclosedqty" || key == "triggerprice" || key == "timeperiod"){
+        message("in if",key)
+        params[[key]]<-as.integer(params[[key]])
+
+        message(params[[key]])
+
+      }
+    }
+  }
+
+  method_params = params
+  r <- NULL
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.gtt.cancel",method_params)
+    r<-httr::content(r)
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r)) r
+  return(r)
+}
+
+#'Function to get the details of gtt rule
+#'@param object An object of type smart connect.
+#'@param id Gtt rule id.
+#'@return Returns a data frame with gtt details, if successful.
+#'@export
+gtt_details<-function(object,id){
+  method_params=list("id"=id)
+  r <- NULL
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.gtt.details",method_params)
+    r<-httr::content(r)
+
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r))r <- r
+  return(r)
+}
+#'Function to get the detailed list of gtt rule
+#'@param object An object of type smart connect.
+#'@param status a list of status to find the rulelist accordingly
+#'@param page No of page
+#'@param count no of counts of rule
+#'@return Returns a data frame with gtt detailed list, if successful.
+#'@export
+gtt_lists<-function(object,status,page,count){
+  params <- as.list(environment(), all=TRUE)
+  params[["object"]] <- NULL
+  keys <- names(params)
+
+  for(key in keys){
+    if(is.null(params[[key]])){
+      params[[key]] <- NULL
+    }
+  }
+
+  method_params = params
+  message(is.list(method_params))
+  r <- NULL
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.gtt.list",method_params)
+    r<-httr::content(r)
+
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r))r <- r
+  return(r)
+}
+#'Function to get the historic data
+#'@param object An object of type smart connect.
+#'@param exchange Exchange for the order, e.g. NSE, NFO, CDS etc
+#'@param symboltoken symboltoken.
+#'@param interval time interval
+#'@param fromdate fromdate
+#'@param todate todate
+#'@return Returns historic data from the date range given with the time interval provided, if successful.
+#'@export
+get_candle_data<-function(object,exchange,symboltoken,interval,fromdate,todate){
+  params <- as.list(environment(), all=TRUE)
+  params[["object"]] <- NULL
+  keys <- names(params)
+
+  for(key in keys){
+    if(is.null(params[[key]])){
+      params[[key]] <- NULL
+    }
+  }
+
+  method_params = params
+  r <- NULL
+
+  tryCatch({
+    r<-rest_api_call(object,"POST","api.candle.data",method_params)
+    r<-httr::content(r)
+
+  }, error=function(e){
+    message(e$message)
+  })
+  if(!is.null(r)) r <- r$data
+  return(r)
+}
+

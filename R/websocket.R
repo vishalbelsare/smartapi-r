@@ -6,7 +6,6 @@ setClass("webSocket",
            feedToken = "character",
            clientCode ="character",
            script="character"
-
          )
          )
 root_url<- "wss://omnefeeds.angelbroking.com/NestHtml5Mobile/socket/stream"

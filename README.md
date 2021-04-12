@@ -1,5 +1,6 @@
-# SMARTAPI-R
 
+#SMARTAPI-R
+>>>>>>> main
 SMARTAPI-R is a R library for dealing AMX,that is a set of REST-like HTTP APIs that expose many capabilities required to build stock market investment and trading platforms. It lets you execute orders in real time.
 
 ## Installation
@@ -15,6 +16,7 @@ Unzip the file in the below location: Path: C:\Program Files\R\R-4.0.3\library
 ```
 
 
-## Usage
-For details on the use of the package and other important points, please see the package vignette.
+##Usage
 
+For details on the use of the package and other important points, please see the package vignette.
+>>>>>>> main
