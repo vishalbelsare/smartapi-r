@@ -1,6 +1,6 @@
 ---
 title: "R Package for Smart Connect API"
-date: "2021-03-31"
+date: "2021-04-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{smartapi-vignette}
@@ -60,6 +60,7 @@ gttmodifyRule<-gtt_modify(object,10,"SBIN-EQ","3045","NSE","MARGIN","BUY",100000
 gttCancelRule<-gtt_cancel(object,10,"3045","NSE")
 gttDetails<-gtt_details(object,10)
 gttLists<-gtt_lists(object,c("FORALL","CANCELLED"),1,10)
+historicdata<-get_candle_data(object,"NSE","3045","ONE_MINUTE","2021-03-08 09:00","2021-03-09 09:20")
 
 
 ##Websocket
