@@ -44,7 +44,11 @@ The following displays the call signatures for some useful functions.
 profile <- get_profile(object,object@refresh_token)
 object<- generate_token(object,object@refresh_token)
 object<-renew_access_token(object)
-order_id<-place_order(object,"NORMAL","SBIN-EQ","3045","BUY","NSE","LIMIT","INTRADAY","DAY","19500","0","0","1")
+
+order_id<-place_order(object,"STOPLOSS","ITC-EQ","1660","BUY","NSE","209","STOPLOSS_LIMIT","INTRADAY","DAY","210","323")
+OR
+order_id<-place_order(object,"NORMAL","SBIN-EQ","3045","BUY","NSE",NULL,"LIMIT","INTRADAY","DAY","19500","1")
+
 order_id<-modify_order(object,"NORMAL",order_id,"LIMIT","INTRADAY","DAY","19500","1","SBIN-EQ","3045","NSE")
 order_id<-cancel_order(object,order_id, "NORMAL")
 order<-order_book(object)
@@ -67,8 +71,8 @@ historicdata<-get_candle_data(object,"NSE","3045","ONE_MINUTE","2021-03-08 09:00
 clientcode<-object@user_id
 feedToken<-object@feed_token
 script<-"nse_cm|2885&nse_cm|1594"   //exchange|token for multi stocks use & seperator
-
-connection_object<-connect_object(list(feedToken=feedToken,clientCode=clientcode,script=script))
+task<-"mw"
+connection_object<-connect_object(list(feedToken=feedToken,clientCode=clientcode,script=script,task=task))
 
 webSocket.connect(connection_object)
 
