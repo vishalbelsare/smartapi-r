@@ -11,7 +11,7 @@ setClass("webSocket",
          )
 root_url<- 'wss://wsfeeds.angelbroking.com/NestHtml5Mobile/socket/stream'
 
-connect_object<-function(params){
+websocket_connect_object<-function(params){
   object = methods::new("webSocket")
   tryCatch({
     object@url=ifelse(is.null(params[['url']]),root_url,params[['url']])
@@ -34,12 +34,16 @@ webSocket.connect<-(function(object){
   ws$onOpen(function(event){
     is_open<-TRUE
     message("connection is opened")
-    #ws$send(toJSON(list("task"="cn","channel"="","token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
+
+    #ws$send(toJSON(list("task"=object@task,"channel"="","token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
     fetch_ticks()
     send_ticks()
+
   })
   fetch_ticks<-function(){
     message("Fetching Ticks")
+    ws$send(toJSON(list("task"="cn","channel"=object@script,"token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
+
     ws$send(toJSON(list("task"=object@task,"channel"=object@script,"token"=object@feedToken,"user"=object@clientCode,"acctid"=object@clientCode)))
 
   }

@@ -12,6 +12,8 @@ Depends:
     R (>= 2.10),
     stats
 Imports:
+    base64,
+    rjson,
     httr,
     readr,
     digest,

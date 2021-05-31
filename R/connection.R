@@ -388,6 +388,7 @@ generate_session<-function(object,clientCode,password){
   refresh_token=r$data$refreshToken
   feed_token=r$data$feedToken
 
+
   object=set_access_token(object,access_token)
   object=set_refresh_token(object,refresh_token)
   object=set_feed_token(object,feed_token)
