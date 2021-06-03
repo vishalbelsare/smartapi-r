@@ -168,7 +168,7 @@ get_profile <- function(object,refresh_token){
 #'@return Returns an order ID (string), if successful.
 #'@export
 
-place_order<-function(object,variety,tradingsymbol,symboltoken,transactiontype,exchange,triggerprice,ordertype,producttype,duration,price,quantity){
+place_order<-function(object,variety,tradingsymbol,symboltoken,transactiontype,exchange,triggerprice,ordertype,producttype,duration,price,quantity,stoploss,squareoff){
   params <- as.list(environment(), all=TRUE)
   params[["object"]] <- NULL
   keys <- names(params)

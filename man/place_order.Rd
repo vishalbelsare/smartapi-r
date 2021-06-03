@@ -16,7 +16,9 @@ place_order(
   producttype,
   duration,
   price,
-  quantity
+  quantity,
+  stoploss,
+  squareoff
 )
 }
 \arguments{
@@ -42,9 +44,9 @@ place_order(
 
 \item{quantity}{Quantity of the order.}
 
-\item{squareoff}{Price difference for profit booking (bracker orders).}
-
 \item{stoploss}{Price difference for loss booking (bracket orders).}
+
+\item{squareoff}{Price difference for profit booking (bracker orders).}
 }
 \value{
 Returns an order ID (string), if successful.
