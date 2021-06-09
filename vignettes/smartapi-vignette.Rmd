@@ -45,11 +45,13 @@ profile <- get_profile(object,object@refresh_token)
 object<- generate_token(object,object@refresh_token)
 object<-renew_access_token(object)
 
-order_id<-place_order(object,"STOPLOSS","ITC-EQ","1660","BUY","NSE","209","STOPLOSS_LIMIT","INTRADAY","DAY","210","323")
-OR
-order_id<-place_order(object,"NORMAL","SBIN-EQ","3045","BUY","NSE",NULL,"LIMIT","INTRADAY","DAY","19500","1")
+If variety = ROBO than you need to pass stoploss and squareoff value, else pass NULL.
+order_id<-place_order(object,"STOPLOSS","ITC-EQ","1660","BUY","NSE","209","STOPLOSS_LIMIT","INTRADAY","DAY","210","323",NULL,NULL)
 
-order_id<-modify_order(object,"NORMAL",order_id,"LIMIT","INTRADAY","DAY","19500","1","SBIN-EQ","3045","NSE")
+fOR Variety = Normal than than you need to pass stoploss and squareoff value as NULL.
+order_id<-place_order(object,"NORMAL","SBIN-EQ","3045","BUY","NSE",NULL,"LIMIT","INTRADAY","DAY","19500","1",NULL,NULL)
+
+order_id<-modify_order(object,"NORMAL",order_id,"LIMIT","INTRADAY","DAY","19500","1","SBIN-EQ","3045","NSE",NULL,NULL)
 order_id<-cancel_order(object,order_id, "NORMAL")
 order<-order_book(object)
 trade<-trade_book(object)
