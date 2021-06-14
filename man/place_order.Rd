@@ -4,22 +4,7 @@
 \alias{place_order}
 \title{Function to place a trade.}
 \usage{
-place_order(
-  object,
-  variety,
-  tradingsymbol,
-  symboltoken,
-  transactiontype,
-  exchange,
-  triggerprice,
-  ordertype,
-  producttype,
-  duration,
-  price,
-  quantity,
-  stoploss,
-  squareoff
-)
+place_order(object, param)
 }
 \arguments{
 \item{object}{An object of type smart connect.}
@@ -42,11 +27,11 @@ place_order(
 
 \item{price}{Price if required (e.g. for limit orders).}
 
-\item{quantity}{Quantity of the order.}
+\item{squareoff}{Price difference for profit booking (bracker orders).}
 
 \item{stoploss}{Price difference for loss booking (bracket orders).}
 
-\item{squareoff}{Price difference for profit booking (bracker orders).}
+\item{quantity}{Quantity of the order.}
 }
 \value{
 Returns an order ID (string), if successful.

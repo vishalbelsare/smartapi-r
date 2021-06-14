@@ -4,19 +4,7 @@
 \alias{modify_order}
 \title{Function to modify an exiting order.}
 \usage{
-modify_order(
-  object,
-  variety,
-  orderid,
-  ordertype,
-  producttype,
-  duration,
-  price,
-  quantity,
-  tradingsymbol,
-  symboltoken,
-  exchange
-)
+modify_order(object, param)
 }
 \arguments{
 \item{object}{An object of type smart connect.}
@@ -27,9 +15,9 @@ modify_order(
 
 \item{ordertype}{Order type, e.g. MARKET, LIMIT, SL or SL-M.}
 
-\item{producttype}{Product type, e.g. MIS, NRML, CNC, BO or CO}
-
 \item{duration}{Duration}
+
+\item{producttype}{Product type, e.g. MIS, NRML, CNC, BO or CO}
 
 \item{price}{New Price (e.g. for limit orders).}
 

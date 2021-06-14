@@ -45,9 +45,9 @@ profile <- get_profile(object,object@refresh_token)
 object<- generate_token(object,object@refresh_token)
 object<-renew_access_token(object)
 
-order_id<-place_order(object,"STOPLOSS","ITC-EQ","1660","BUY","NSE","209","STOPLOSS_LIMIT","INTRADAY","DAY","210","323")
+order_id<-place_order(object,list(variety="STOPLOSS",tradingsymbol="ITC-EQ",symboltoken="1660",transactiontype="BUY",exchange="NSE",triggerprice="209",ordertype="STOPLOSS_LIMIT",producttype="INTRADAY",duration="DAY",price="210",quantity="323")
 OR
-order_id<-place_order(object,"NORMAL","SBIN-EQ","3045","BUY","NSE",NULL,"LIMIT","INTRADAY","DAY","19500","1")
+order_id<-place_order(object,list(variety="NORMAL",tradingsymbol="SBIN-EQ",symboltoken="3045",transactiontype="BUY",exchange="NSE",ordertype="MARKET",producttype="INTRADAY",duration="DAY",price="210",quantity="323",sqaureoff="0",stoploss="0")
 
 order_id<-modify_order(object,"NORMAL",order_id,"LIMIT","INTRADAY","DAY","19500","1","SBIN-EQ","3045","NSE")
 order_id<-cancel_order(object,order_id, "NORMAL")

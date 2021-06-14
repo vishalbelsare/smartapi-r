@@ -3,6 +3,7 @@
 options(scipen=999)
 
 rest_api_call <- function(object,method,endpoint,method_params){
+  message(endpoint)
   if(!method=="POST"){
     if(!is_api_connected(object)){
       stop(NotConnectedToAPIException)
@@ -37,7 +38,6 @@ rest_api_call <- function(object,method,endpoint,method_params){
                                        "X-SourceID"=object@sourceid,
                                        "Authorization"=authorization))
     } else if(method=="post"){
-
       r <- httr::POST(url,body = method_params, encode = "json",
                       httr::add_headers("Content-type"=object@accept,
                                         "X-ClientLocalIP"=object@localip,
@@ -48,7 +48,6 @@ rest_api_call <- function(object,method,endpoint,method_params){
                                         "X-UserType"=object@usertype,
                                         "X-SourceID"=object@sourceid,
                                         "Authorization"=authorization))
-
 
     } else if(method=="put"){
       r <- httr::PUT(url,body = method_params, encode = "json",
@@ -71,7 +70,7 @@ rest_api_call <- function(object,method,endpoint,method_params){
                                           "X-PrivateKey"=privateKey,
                                           "X-UserType"=object@usertype,
                                           "X-SourceID"=object@sourceid,
-                                          "Authorization"=authorization))
+                                           "Authorization"=authorization))
     } else{
       stop(UnknwonHttpException)
     }
@@ -168,10 +167,12 @@ get_profile <- function(object,refresh_token){
 #'@return Returns an order ID (string), if successful.
 #'@export
 
-place_order<-function(object,variety,tradingsymbol,symboltoken,transactiontype,exchange,triggerprice,ordertype,producttype,duration,price,quantity,stoploss,squareoff){
+place_order<-function(object,param){
   params <- as.list(environment(), all=TRUE)
+
   params[["object"]] <- NULL
-  keys <- names(params)
+
+  keys <- names(params[["param"]])
 
   for(key in keys){
     if(is.null(params[[key]])){
@@ -180,11 +181,12 @@ place_order<-function(object,variety,tradingsymbol,symboltoken,transactiontype,e
   }
 
   method_params = params
+
   r <- NULL
 
   tryCatch({r <- rest_api_call(object,"POST","api.order.place",method_params)
   r<-httr::content(r)
-
+  message(r)
   }, error=function(e){
     message(e$message)
   })
@@ -217,10 +219,10 @@ place_order<-function(object,variety,tradingsymbol,symboltoken,transactiontype,e
 #'@return Returns an order ID (string), if successful.
 #'@export
 
-modify_order<-function(object,variety,orderid,ordertype,producttype,duration,price,quantity,tradingsymbol,symboltoken,exchange){
+modify_order<-function(object,param){
   params <- as.list(environment(), all=TRUE)
   params[["object"]] <- NULL
-  keys <- names(params)
+  keys <- names(params[["param"]])
 
   for(key in keys){
     if(is.null(params[[key]])){
