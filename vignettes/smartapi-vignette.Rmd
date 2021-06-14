@@ -49,7 +49,10 @@ order_id<-place_order(object,list(variety="STOPLOSS",tradingsymbol="ITC-EQ",symb
 OR
 order_id<-place_order(object,list(variety="NORMAL",tradingsymbol="SBIN-EQ",symboltoken="3045",transactiontype="BUY",exchange="NSE",ordertype="MARKET",producttype="INTRADAY",duration="DAY",price="210",quantity="323",sqaureoff="0",stoploss="0")
 
-order_id<-modify_order(object,"NORMAL",order_id,"LIMIT","INTRADAY","DAY","19500","1","SBIN-EQ","3045","NSE")
+fOR Variety = Normal than than you need to pass stoploss and squareoff value as NULL.
+order_id<-place_order(object,"NORMAL","SBIN-EQ","3045","BUY","NSE",NULL,"LIMIT","INTRADAY","DAY","19500","1",NULL,NULL)
+
+order_id<-modify_order(object,"NORMAL",order_id,"LIMIT","INTRADAY","DAY","19500","1","SBIN-EQ","3045","NSE",NULL,NULL)
 order_id<-cancel_order(object,order_id, "NORMAL")
 order<-order_book(object)
 trade<-trade_book(object)
